@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>MP3 Player</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <p class="eyebrow">MP3 Player</p>
+        <button id="themeToggle" class="icon-button theme-toggle" title="Переключить тему">◐</button>
+      </header>
+
+      <main class="content">
+        <section class="toolbar" aria-label="&#1059;&#1087;&#1088;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1077; &#1073;&#1080;&#1073;&#1083;&#1080;&#1086;&#1090;&#1077;&#1082;&#1086;&#1081;">
+          <button class="pill active" data-view="songs">&#1055;&#1077;&#1089;&#1085;&#1080;</button>
+          <button class="pill" data-view="favorites">&#1048;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;</button>
+          <button class="pill" data-view="playlists">&#1055;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;&#1099;</button>
+          <button class="pill" data-view="genres">&#1046;&#1072;&#1085;&#1088;&#1099;</button>
+          <button class="pill" data-view="artists">&#1048;&#1089;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1077;&#1083;&#1080;</button>
+          <button class="pill" data-view="albums">&#1040;&#1083;&#1100;&#1073;&#1086;&#1084;&#1099;</button>
+          <input id="fileInput" type="file" accept="audio/*" multiple hidden />
+        </section>
+
+        <section id="songsView" class="view active">
+          <div class="section-title">
+            <h2>&#1055;&#1077;&#1089;&#1077;&#1085; <span id="songCount">0</span></h2>
+            <div class="header-actions">
+              <button id="playAllButton" class="play-mode-button" title="&#1042;&#1089;&#1077; &#1087;&#1086;&#1076;&#1088;&#1103;&#1076;"></button>
+              <button id="shuffleButton" class="play-mode-button" title="&#1057;&#1083;&#1091;&#1095;&#1072;&#1081;&#1085;&#1086;"></button>
+              <button id="addMusicButton" class="icon-button search-button" title="&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1084;&#1091;&#1079;&#1099;&#1082;&#1091;">+</button>
+              <button id="searchToggle" class="icon-button search-button" title="&#1055;&#1086;&#1080;&#1089;&#1082;">&#8981;</button>
+            </div>
+          </div>
+          <div id="searchRow" class="search-row" hidden>
+            <input id="searchInput" type="search" placeholder="&#1055;&#1086;&#1080;&#1089;&#1082; &#1087;&#1077;&#1089;&#1085;&#1080;" autocomplete="off" />
+          </div>
+          <div id="emptyState" class="empty-state">
+            <strong>&#1044;&#1086;&#1073;&#1072;&#1074;&#1100;&#1090;&#1077; MP3 &#1080;&#1083;&#1080; &#1076;&#1088;&#1091;&#1075;&#1086;&#1081; &#1072;&#1091;&#1076;&#1080;&#1086;&#1092;&#1072;&#1081;&#1083;</strong>
+            <span>&#1053;&#1072;&#1078;&#1084;&#1080;&#1090;&#1077; &#1087;&#1083;&#1102;&#1089; &#1080; &#1074;&#1099;&#1073;&#1077;&#1088;&#1080;&#1090;&#1077; &#1084;&#1091;&#1079;&#1099;&#1082;&#1091; &#1085;&#1072; &#1090;&#1077;&#1083;&#1077;&#1092;&#1086;&#1085;&#1077;.</span>
+          </div>
+          <ul id="songList" class="song-list"></ul>
+        </section>
+
+        <section id="favoritesView" class="view">
+          <div class="section-title">
+            <h2>&#1048;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;</h2>
+            <div class="header-actions">
+              <button id="favoritePlayAllButton" class="play-mode-button" title="&#1042;&#1089;&#1077; &#1087;&#1086;&#1076;&#1088;&#1103;&#1076;"></button>
+              <button id="favoriteShuffleButton" class="play-mode-button" title="&#1057;&#1083;&#1091;&#1095;&#1072;&#1081;&#1085;&#1086;"></button>
+              <button id="favoriteAddButton" class="icon-button search-button" title="&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1080;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;">+</button>
+              <button id="favoriteSearchToggle" class="icon-button search-button" title="&#1055;&#1086;&#1080;&#1089;&#1082;">&#8981;</button>
+            </div>
+          </div>
+          <div id="favoriteSearchRow" class="search-row" hidden>
+            <input id="favoriteSearchInput" type="search" placeholder="&#1055;&#1086;&#1080;&#1089;&#1082; &#1074; &#1080;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1084;" autocomplete="off" />
+          </div>
+          <ul id="favoriteList" class="song-list"></ul>
+        </section>
+
+        <section id="playlistsView" class="view">
+          <div class="section-title">
+            <h2>&#1055;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;&#1099;</h2>
+            <div class="header-actions">
+              <button id="newPlaylistButton" class="icon-button search-button" title="&#1057;&#1086;&#1079;&#1076;&#1072;&#1090;&#1100; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;">+</button>
+              <button id="playlistSearchToggle" class="icon-button search-button" title="&#1055;&#1086;&#1080;&#1089;&#1082; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;&#1072;">&#8981;</button>
+            </div>
+          </div>
+          <div id="playlistSearchRow" class="search-row" hidden>
+            <input id="playlistSearchInput" type="search" placeholder="&#1055;&#1086;&#1080;&#1089;&#1082; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;&#1072;" autocomplete="off" />
+          </div>
+          <div class="playlist-form" id="playlistForm">
+            <input id="playlistName" type="text" maxlength="32" placeholder="&#1053;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1077; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;&#1072;" />
+            <button id="savePlaylistButton" class="icon-button" title="&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100;">&#10003;</button>
+          </div>
+          <div id="playlistList" class="playlist-list"></div>
+        </section>
+
+        <section id="genresView" class="view">
+          <div class="section-title"><h2>&#1046;&#1072;&#1085;&#1088;&#1099;</h2></div>
+          <div id="genreList" class="group-list"></div>
+        </section>
+
+        <section id="artistsView" class="view">
+          <div class="section-title"><h2>&#1048;&#1089;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1077;&#1083;&#1080;</h2></div>
+          <div id="artistList" class="group-list"></div>
+        </section>
+
+        <section id="albumsView" class="view">
+          <div class="section-title"><h2>&#1040;&#1083;&#1100;&#1073;&#1086;&#1084;&#1099;</h2></div>
+          <div id="albumList" class="group-list"></div>
+        </section>
+      </main>
+
+      <button id="miniPlayer" class="mini-player" hidden>
+        <div>
+          <span id="miniTitle">&#1055;&#1077;&#1089;&#1085;&#1103;</span>
+          <small id="miniArtist">&#1053;&#1072;&#1078;&#1084;&#1080;&#1090;&#1077;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100;</small>
+        </div>
+        <span id="miniState">&#9654;</span>
+      </button>
+    </div>
+
+    <div id="playerSheet" class="player-sheet" aria-hidden="true">
+      <div class="sheet-header">
+        <button id="closePlayer" class="icon-button" title="&#1042;&#1099;&#1081;&#1090;&#1080;">&#8592;</button>
+        <span></span>
+        <button id="queueButton" class="icon-button" title="&#1057;&#1083;&#1077;&#1076;&#1091;&#1102;&#1097;&#1080;&#1077; &#1087;&#1077;&#1089;&#1085;&#1080;">&#9776;</button>
+      </div>
+      <div class="cover-art"><span>&#9834;</span></div>
+      <div class="track-info">
+        <h2 id="playerTitle">&#1042;&#1099;&#1073;&#1077;&#1088;&#1080;&#1090;&#1077; &#1087;&#1077;&#1089;&#1085;&#1102;</h2>
+        <p id="playerSubtitle">&#1052;&#1091;&#1079;&#1099;&#1082;&#1072; &#1087;&#1086;&#1103;&#1074;&#1080;&#1090;&#1089;&#1103; &#1079;&#1076;&#1077;&#1089;&#1100;</p>
+      </div>
+      <div class="secondary-controls">
+        <button id="timerButton" class="control-button" title="&#1058;&#1072;&#1081;&#1084;&#1077;&#1088;"><span id="timerLabel">&#1058;&#1072;&#1081;&#1084;&#1077;&#1088;</span></button>
+        <button id="likeButton" class="control-button" title="&#1042; &#1080;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;">&#9825;<span>&#1051;&#1072;&#1081;&#1082;</span></button>
+        <button id="loopButton" class="control-button" title="&#1055;&#1086;&#1074;&#1090;&#1086;&#1088;"><span id="loopLabel">&#1042;&#1099;&#1082;&#1083;</span></button>
+      </div>
+      <div class="seek-area">
+        <input id="seekBar" type="range" min="0" value="0" step="1" />
+        <div class="time-row">
+          <span id="currentTime">0:00</span>
+          <span id="remainingTime">-0:00</span>
+        </div>
+      </div>
+      <div class="main-controls">
+        <button id="prevButton" class="round-button" title="&#1055;&#1088;&#1077;&#1076;&#1099;&#1076;&#1091;&#1097;&#1072;&#1103;">&#9198;</button>
+        <button id="playButton" class="play-button" title="&#1055;&#1072;&#1091;&#1079;&#1072; &#1080;&#1083;&#1080; &#1074;&#1086;&#1089;&#1087;&#1088;&#1086;&#1080;&#1079;&#1074;&#1077;&#1076;&#1077;&#1085;&#1080;&#1077;">&#9654;</button>
+        <button id="nextButton" class="round-button" title="&#1057;&#1083;&#1077;&#1076;&#1091;&#1102;&#1097;&#1072;&#1103;">&#9197;</button>
+      </div>
+    </div>
+
+    <div id="queuePanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card">
+        <div class="sheet-header">
+          <span>&#1057;&#1083;&#1077;&#1076;&#1091;&#1102;&#1097;&#1080;&#1077; &#1087;&#1077;&#1089;&#1085;&#1080;</span>
+          <button id="closeQueue" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+        </div>
+        <ul id="queueList" class="song-list compact"></ul>
+      </div>
+    </div>
+
+    <div id="favoriteAddPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card">
+        <div class="sheet-header">
+          <span>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1080;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;</span>
+          <div class="panel-actions">
+            <button id="confirmFavoriteAdd" class="icon-button square-control" title="&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074;&#1099;&#1073;&#1088;&#1072;&#1085;&#1085;&#1099;&#1077;">+</button>
+            <button id="closeFavoriteAdd" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+          </div>
+        </div>
+        <ul id="favoriteAddList" class="song-list compact"></ul>
+      </div>
+    </div>
+
+    <div id="playlistAddPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card">
+        <div class="sheet-header">
+          <span id="playlistAddTitle">&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;</span>
+          <div class="panel-actions">
+            <button id="confirmPlaylistAdd" class="icon-button square-control" title="&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074;&#1099;&#1073;&#1088;&#1072;&#1085;&#1085;&#1099;&#1077;">+</button>
+            <button id="closePlaylistAdd" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+          </div>
+        </div>
+        <ul id="playlistAddList" class="song-list compact"></ul>
+      </div>
+    </div>
+
+    <div id="playlistDetailPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card">
+        <div class="sheet-header playlist-detail-header">
+          <span id="playlistDetailTitle">&#1055;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;</span>
+          <div class="playlist-detail-actions">
+            <button id="playlistDetailAddButton" class="icon-button square-control" title="&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1087;&#1077;&#1089;&#1085;&#1080;">+</button>
+            <button id="playlistSequentialButton" class="icon-button square-control" title="&#1048;&#1075;&#1088;&#1072;&#1090;&#1100; &#1087;&#1086; &#1087;&#1086;&#1088;&#1103;&#1076;&#1082;&#1091;">&#9654;</button>
+            <button id="playlistRandomButton" class="icon-button square-control" title="&#1048;&#1075;&#1088;&#1072;&#1090;&#1100; &#1089;&#1083;&#1091;&#1095;&#1072;&#1081;&#1085;&#1086;">&#10536;</button>
+            <button id="closePlaylistDetail" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+          </div>
+        </div>
+        <ul id="playlistDetailList" class="song-list compact"></ul>
+      </div>
+    </div>
+
+    <div id="songActionPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card small">
+        <div class="sheet-header">
+          <span id="songActionTitle">&#1057;&#1074;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1087;&#1077;&#1089;&#1085;&#1080;</span>
+          <button id="closeSongAction" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+        </div>
+        <div class="action-list">
+          <button id="songActionFavorite" type="button"><span id="songActionFavoriteIcon">&#9825;</span><span id="songActionFavoriteText">&#1042; &#1080;&#1079;&#1073;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077;</span></button>
+          <button id="songActionPlaylist" type="button"><span>+</span><span>&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;</span></button>
+          <button id="songActionDelete" type="button" class="danger-action"><span>&#215;</span><span>&#1059;&#1076;&#1072;&#1083;&#1080;&#1090;&#1100; &#1080;&#1079; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlistTargetPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card small">
+        <div class="sheet-header">
+          <span id="playlistTargetTitle">&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1074; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;</span>
+          <button id="closePlaylistTarget" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+        </div>
+        <div class="playlist-target-form">
+          <input id="playlistTargetName" type="text" maxlength="32" placeholder="&#1053;&#1086;&#1074;&#1099;&#1081; &#1087;&#1083;&#1077;&#1081;&#1083;&#1080;&#1089;&#1090;" />
+          <button id="createPlaylistTarget" class="icon-button square-control" title="&#1057;&#1086;&#1079;&#1076;&#1072;&#1090;&#1100;">&#10003;</button>
+        </div>
+        <div id="playlistTargetList" class="action-list"></div>
+      </div>
+    </div>
+
+    <div id="confirmPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card small confirm-card">
+        <div class="confirm-body">
+          <strong id="confirmTitle">&#1055;&#1086;&#1076;&#1090;&#1074;&#1077;&#1088;&#1076;&#1080;&#1090;&#1077;</strong>
+          <span id="confirmMessage">&#1042;&#1099; &#1091;&#1074;&#1077;&#1088;&#1077;&#1085;&#1099;?</span>
+        </div>
+        <div class="confirm-actions">
+          <button id="confirmNo" type="button">&#1053;&#1077;&#1090;</button>
+          <button id="confirmYes" type="button">&#1044;&#1072;</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="timerPanel" class="queue-panel" aria-hidden="true">
+      <div class="panel-card small">
+        <div class="sheet-header">
+          <span>&#1058;&#1072;&#1081;&#1084;&#1077;&#1088; &#1089;&#1085;&#1072;</span>
+          <button id="closeTimer" class="icon-button" title="&#1047;&#1072;&#1082;&#1088;&#1099;&#1090;&#1100;">&#215;</button>
+        </div>
+        <div class="timer-grid">
+          <button data-minutes="5">5 &#1084;&#1080;&#1085;</button>
+          <button data-minutes="15">15 &#1084;&#1080;&#1085;</button>
+          <button data-minutes="30">30 &#1084;&#1080;&#1085;</button>
+          <button id="customTimer">&#1057;&#1074;&#1086;&#1077;</button>
+        </div>
+        <div id="customTimerRow" class="custom-timer-row" hidden>
+          <input id="customTimerInput" type="number" inputmode="numeric" min="1" max="999" placeholder="&#1052;&#1080;&#1085;&#1091;&#1090;&#1099;" />
+          <button id="startCustomTimer" class="icon-button square-control" title="&#1047;&#1072;&#1087;&#1091;&#1089;&#1090;&#1080;&#1090;&#1100; &#1090;&#1072;&#1081;&#1084;&#1077;&#1088;">&#10003;</button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="audio"></audio>
+    <script src="app.js"></script>
+  </body>
+</html>
