@@ -129,10 +129,10 @@ MP3 Player
 A mobile-style web player for local audio files. It launches like a local app through `MP3 Player.vbs`, opens in the browser, and stores imported music inside browser storage without deleting the original files from the device.
 
 ## How to start
-1. Open the project tool; this can be any folder in C:\Users\path\in\.
+1. Open the project tool; this can be any folder in `C:\Users\path\in\`
 
-2. Open a terminal in this menu and enter git clone https://github.com/dumuzeyn/MP3-player-as-web-app.
-> If you don't know how to launch a terminal in the console, press win + r and type cmd in the window that appears. A terminal will open. Enter cd C:\Users\path\in\, followed by the command to adjust the settings from step 2.
+2. Open a terminal in this menu and enter `git clone https://github.com/dumuzeyn/MP3-player-as-web-app`
+> If you don't know how to launch a terminal in the console, press `win + r` and type `cmd` in the window that appears. A terminal will open. Enter `cd C:\Users\path\in\`, followed by the command to adjust the settings from step 2.
 
 3. After downloading the repository, the MP3 Player.vbs file will appear. Run the application if needed.
 > The script silently launches a local server on 127.0.0.1:4173, and then the browser automatically opens the player.
