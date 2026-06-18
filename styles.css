@@ -11,7 +11,7 @@
 }
 
 body.theme-dark {
-  /* RU: Второй режим меняет только базовую пару цветов: черный и белый. */
+  /* RU: ������ ����� ������ ������ ������� ���� ������: ������ � �����. */
   /* EN: The alternate mode only swaps the base black and white colors. */
   color-scheme: dark;
   --bg: #000;
@@ -563,7 +563,7 @@ h2 {
 }
 
 .cover-art {
-  /* RU: Обложка меньше, чтобы на телефоне полностью помещались кнопки управления. */
+  /* RU: ������� ������, ����� �� �������� ��������� ���������� ������ ����������. */
   /* EN: The cover is smaller so mobile controls stay fully visible. */
   width: min(62vw, 280px, 36vh);
   aspect-ratio: 1;
@@ -825,4 +825,251 @@ body:not(.theme-dark) .queue-panel {
   .player-sheet.open {
     transform: translate(-50%, 0);
   }
+}
+/* Final mobile parity layer / mobile web sync */
+:root {
+  --icon-filter: none;
+}
+
+body.theme-dark {
+  --icon-filter: invert(1);
+}
+
+button,
+input {
+  line-height: 1;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+}
+
+.brand-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  color: var(--text);
+  filter: var(--icon-filter);
+}
+
+.toolbar {
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--bg);
+}
+
+.pill {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+}
+
+.pill.active {
+  border-color: transparent;
+}
+
+.icon-button,
+.tiny-button,
+.round-button,
+.play-button,
+.play-mode-button,
+#miniState {
+  line-height: 1;
+}
+
+.icon-button,
+.play-mode-button {
+  font-size: 28px;
+}
+
+.search-button {
+  font-size: 30px;
+  font-weight: 1000;
+}
+
+#shuffleButton::before,
+#favoriteShuffleButton::before {
+  content: "\21C4";
+  font-size: 32px;
+  font-weight: 1000;
+  transform: translateY(-1px);
+}
+
+.shuffle-group,
+.shuffle-playlist,
+#playlistRandomButton {
+  font-size: 30px;
+  font-weight: 1000;
+}
+
+.song-row,
+.group-card {
+  gap: 12px;
+  border: 0;
+}
+
+.playlist-card {
+  border: 0;
+}
+
+.song-cover,
+.group-cover,
+.playlist-cover-stack,
+.cover-art {
+  border-radius: 12px;
+}
+
+.song-main,
+.group-main {
+  min-width: 0;
+}
+
+.mini-player {
+  position: fixed !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  left: 50% !important;
+  z-index: 90 !important;
+  transform: translateX(-50%) !important;
+}
+
+#closePlayer {
+  font-size: 30px;
+  font-weight: 1000;
+}
+/* Web final polish layer */
+:root {
+  --icon-filter: none;
+}
+
+body.theme-dark {
+  --icon-filter: invert(1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.brand-icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+  filter: var(--icon-filter);
+}
+
+button,
+.icon-button,
+.tiny-button,
+.round-button,
+.play-button,
+.play-mode-button,
+.control-button,
+.timer-grid button,
+.confirm-actions button,
+.action-list button,
+.action-list button span:first-child {
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none;
+}
+
+.icon-button,
+.tiny-button,
+.round-button,
+.play-button,
+.play-mode-button,
+.control-button,
+#miniState {
+  line-height: 1;
+}
+
+.toolbar {
+  cursor: grab;
+  user-select: none;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--bg);
+}
+
+.toolbar.dragging {
+  cursor: grabbing;
+}
+
+.pill {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+}
+
+.pill.active {
+  border-color: transparent;
+}
+
+#shuffleButton::before,
+#favoriteShuffleButton::before {
+  content: "\21C4";
+  display: inline-block;
+  font-size: 33px;
+  font-weight: 1000;
+  transform: translateY(-4px);
+}
+
+.shuffle-group,
+.shuffle-playlist,
+#playlistRandomButton {
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 1000;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+.playlist-card {
+  display: block;
+  min-height: 72px;
+  padding: 10px 12px;
+}
+
+.playlist-header {
+  min-height: 52px;
+}
+
+.playlist-name {
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.playlist-meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.playlist-preview {
+  display: none;
+}
+
+.song-row,
+.playlist-card,
+.group-card {
+  border: 0;
+}
+
+.song-cover,
+.group-cover,
+.playlist-cover-stack,
+.cover-art {
+  border-radius: 12px;
 }

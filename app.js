@@ -1,4 +1,4 @@
-﻿const audio = document.querySelector("#audio");
+const audio = document.querySelector("#audio");
 const fileInput = document.querySelector("#fileInput");
 const songList = document.querySelector("#songList");
 const favoriteList = document.querySelector("#favoriteList");
@@ -116,8 +116,7 @@ const loopText = {
 };
 
 function applyTheme() {
-  // RU: Тема хранится отдельно от библиотеки, чтобы внешний вид не сбрасывался после перезапуска.
-  // EN: The theme is stored separately from the library so the chosen look survives restarts.
+  // EN: Theme is stored separately from the library so the chosen look survives restarts.
   document.body.classList.toggle("theme-dark", state.theme === "dark");
   themeToggle.textContent = state.theme === "dark" ? "\u25d1" : "\u25d0";
   themeToggle.title = state.theme === "dark" ? "\u0411\u0435\u043b\u043e-\u0447\u0435\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c" : "\u0427\u0435\u0440\u043d\u043e-\u0431\u0435\u043b\u044b\u0439 \u0440\u0435\u0436\u0438\u043c";
@@ -130,8 +129,7 @@ function setPlayerOpen(open) {
 }
 
 function updateMiniPlayerVisibility() {
-  // RU: Миниплеер не должен дублировать большой плеер, но должен возвращаться после выхода.
-  // EN: The mini player should not duplicate the full player, but returns when it closes.
+  // EN: The mini player hides under full panels and returns when they close.
   const panelOpen = Boolean(document.querySelector(".queue-panel.open"));
   miniPlayer.hidden = !currentSong() || playerSheet.classList.contains("open") || panelOpen;
 }
@@ -811,7 +809,7 @@ function renderGroupCard(name, songs) {
     </div>
     <div class="group-actions">
       <button class="tiny-button play-group" title="\u0418\u0433\u0440\u0430\u0442\u044c">\u25b6</button>
-      <button class="tiny-button shuffle-group" title="\u0418\u0433\u0440\u0430\u0442\u044c \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e">\u2928</button>
+      <button class="tiny-button shuffle-group" title="\u0418\u0433\u0440\u0430\u0442\u044c \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e">\u21c4</button>
     </div>
   `;
   card.addEventListener("click", () => openGroupDetailPanel(name, songs));
@@ -881,7 +879,7 @@ function renderPlaylist(playlist) {
       </div>
       <div class="playlist-actions">
         <button class="tiny-button play-playlist" title="\u0418\u0433\u0440\u0430\u0442\u044c \u043f\u043e \u043f\u043e\u0440\u044f\u0434\u043a\u0443">\u25b6</button>
-        <button class="tiny-button shuffle-playlist" title="\u0418\u0433\u0440\u0430\u0442\u044c \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e">\u2928</button>
+        <button class="tiny-button shuffle-playlist" title="\u0418\u0433\u0440\u0430\u0442\u044c \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e">\u21c4</button>
         <button class="tiny-button delete-playlist danger" title="\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043f\u043b\u0435\u0439\u043b\u0438\u0441\u0442">\u00d7</button>
       </div>
     </div>
@@ -1284,6 +1282,58 @@ function setupInfiniteToolbar() {
     if (toolbar.scrollLeft < cycleWidth * 0.45) toolbar.scrollLeft += cycleWidth;
     if (toolbar.scrollLeft > cycleWidth * 1.55) toolbar.scrollLeft -= cycleWidth;
   });
+
+  let isDragging = false;
+  let dragStarted = false;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+
+  toolbar.addEventListener("pointerdown", (event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    isDragging = true;
+    dragStarted = false;
+    dragStartX = event.clientX;
+    dragStartScroll = toolbar.scrollLeft;
+    toolbar.setPointerCapture?.(event.pointerId);
+  });
+
+  toolbar.addEventListener("pointermove", (event) => {
+    if (!isDragging) return;
+    const delta = event.clientX - dragStartX;
+    if (Math.abs(delta) > 4) dragStarted = true;
+    if (!dragStarted) return;
+    toolbar.classList.add("dragging");
+    toolbar.scrollLeft = dragStartScroll - delta;
+    event.preventDefault();
+  });
+
+  const stopToolbarDrag = (event) => {
+    if (!isDragging) return;
+    isDragging = false;
+    toolbar.releasePointerCapture?.(event.pointerId);
+    toolbar.classList.remove("dragging");
+    window.setTimeout(() => { dragStarted = false; }, 0);
+  };
+
+  toolbar.addEventListener("pointerup", stopToolbarDrag);
+  toolbar.addEventListener("pointercancel", stopToolbarDrag);
+  toolbar.addEventListener("lostpointercapture", () => {
+    isDragging = false;
+    toolbar.classList.remove("dragging");
+  });
+
+  toolbar.addEventListener("wheel", (event) => {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    toolbar.scrollLeft += event.deltaY;
+    event.preventDefault();
+  }, { passive: false });
+
+  toolbar.addEventListener("click", (event) => {
+    if (dragStarted) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
 }
 
 toolbar.addEventListener("click", (event) => {
