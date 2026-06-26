@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <title>MP3 Player</title>
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="manifest.webmanifest?v=20260627-mobile-ui" />
+    <link rel="stylesheet" href="styles.css?v=20260627-mobile-ui" />
   </head>
   <body>
     <div class="app-shell">
@@ -31,6 +31,8 @@
           <input id="fileInput" type="file" accept="audio/*" multiple hidden />
         </section>
 
+        <div id="viewPager" class="view-pager">
+          <div id="viewTrack" class="view-track">
         <section id="songsView" class="view active">
           <div class="section-title">
             <h2>&#1055;&#1077;&#1089;&#1077;&#1085; <span id="songCount">0</span></h2>
@@ -130,6 +132,8 @@
             </button>
           </div>
         </section>
+          </div>
+        </div>
       </main>
 
       <button id="miniPlayer" class="mini-player" hidden>
@@ -283,6 +287,6 @@
     </div>
 
     <audio id="audio"></audio>
-    <script src="app.js"></script>
+    <script src="app.js?v=20260627-mobile-ui"></script>
   </body>
 </html>

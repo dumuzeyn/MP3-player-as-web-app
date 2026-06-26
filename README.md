@@ -53,9 +53,17 @@ MP3 Player Web - это локальный музыкальный плеер, к
 
 Панель вкладок можно двигать перетаскиванием мышью, тачпадом или колесом мыши. Она сделана как зацикленная лента, поэтому должна ощущаться так, будто может вращаться бесконечно.
 
+На телефоне сами разделы тоже можно двигать пальцем влево и вправо. Во время жеста соседнее окно видно рядом с текущим, поэтому переключение ощущается как мобильный пейджер, а не как резкая замена экрана.
+
+## Мобильная версия
+
+Интерфейс рассчитан на экран телефона: элементы управления имеют крупные зоны нажатия, мини-плеер закреплен снизу с учетом безопасной области, нижние панели быстро выезжают снизу, а активный раздел сохраняет правильную высоту при поиске, создании плейлиста и смене языка.
+
+Импорт большой пачки файлов выполняется небольшими порциями. Благодаря этому браузер успевает обновлять экран и приложение меньше подвисает при добавлении музыки.
+
 ## Воспроизведение
 
-Кнопка воспроизведения у песни запускает эту песню. Щелчок по обложке песни тоже запускает песню и открывает полный плеер.
+Кнопка воспроизведения у песни запускает эту песню внутри текущего списка. После окончания трека плеер продолжает очередь этого раздела, если в ней есть следующие песни. Щелчок по обложке песни тоже запускает песню и открывает полный плеер.
 
 `Play all` создает очередь из текущего раздела и воспроизводит ее по порядку.
 
@@ -216,9 +224,17 @@ Favorites, playlists, theme, and small settings are stored in `localStorage`.
 
 The tab bar can be moved with a mouse drag, trackpad, or mouse wheel. It is built as a looping strip, so it should feel like it can keep spinning.
 
+On phones, the sections themselves can also be dragged left and right. During the gesture, the neighboring screen is visible next to the current one, so navigation feels like a mobile pager instead of a hard screen swap.
+
+## Mobile Version
+
+The interface is tuned for phone screens: controls have large tap areas, the mini player is fixed at the bottom with safe-area support, bottom panels slide up quickly, and the active section keeps the correct height when search, playlist creation, or language changes alter the layout.
+
+Large file imports are processed in small batches. This gives the browser time to repaint and keeps the app more responsive while music is being added.
+
 ## Playback
 
-The play button on a song starts that song. Clicking a song cover also starts that song and opens the full player.
+The play button on a song starts that song inside the current list. After the track ends, the player continues the section queue when more songs are available. Clicking a song cover also starts that song and opens the full player.
 
 `Play all` builds a queue from the current section and plays it in order.
 
